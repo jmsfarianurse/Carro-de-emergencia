@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa Mental — Carro de Emergência</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f8;
+    margin:0;
+    padding:0;
+}
+header{
+    background:#b30000;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+.container{
+    position:relative;
+    width:1000px;
+    height:700px;
+    margin:40px auto;
+    background:white;
+    border-radius:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    overflow:hidden;
+}
+.center{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:220px;
+    height:220px;
+    background:#d62828;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size:26px;
+    font-weight:bold;
+    padding:20px;
+}
+.hotspot{
+    position:absolute;
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:#003049;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    cursor:pointer;
+    font-size:14px;
+    padding:8px;
+    transition:0.3s;
+}
+.hotspot:hover{
+    background:#f77f00;
+    transform:scale(1.08);
+}
+.popup{
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:70%;
+    max-width:700px;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+    z-index:1000;
+}
+.popup h2{
+    margin-top:0;
+    color:#b30000;
+}
+.overlay{
+    display:none;
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    top:0;
+    left:0;
+    z-index:999;
+}
+.close-btn{
+    float:right;
+    cursor:pointer;
+    font-size:22px;
+    font-weight:bold;
+}
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#555;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🚨 Carro de Emergência — Revisão Integrada</h1>
+<p>Mapa Mental Interativo</p>
+</header>
+
+<div class="container">
+
+<div class="center">
+CARRO DE<br>EMERGÊNCIA
+</div>
+
+<div class="hotspot" style="top:40px; left:455px;" onclick="openPopup('sav')">
+SAV / PCR
+</div>
+
+<div class="hotspot" style="top:160px; left:780px;" onclick="openPopup('farmaco')">
+Farmacologia
+</div>
+
+<div class="hotspot" style="top:470px; left:780px;" onclick="openPopup('taqui')">
+Taquiarritmias
+</div>
+
+<div class="hotspot" style="top:580px; left:455px;" onclick="openPopup('bradi')">
+Bradicardia
+</div>
+
+<div class="hotspot" style="top:470px; left:120px;" onclick="openPopup('pospcr')">
+Pós-PCR
+</div>
+
+<div class="hotspot" style="top:160px; left:120px;" onclick="openPopup('anafilaxia')">
+Anafilaxia
+</div>
+
+</div>
+
+<div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+<div class="popup" id="popup">
+<span class="close-btn" onclick="closePopup()">×</span>
+<div id="popup-content"></div>
+</div>
+
+<div class="footer">
+Unidade de Cuidados Intensivos de Cardiologia
+</div>
+
+<script>
+const content = {
+sav: `
+<h2>Suporte Avançado de Vida</h2>
+<ul>
+<li>Reconhecimento da PCR</li>
+<li>Compressões de alta qualidade</li>
+<li>Desfibrilhação precoce</li>
+<li>Ritmos chocáveis e não chocáveis</li>
+<li>Adrenalina e amiodarona</li>
+<li>4H + 4T</li>
+</ul>
+`,
+farmaco: `
+<h2>Farmacologia Essencial</h2>
+<ul>
+<li>Adrenalina</li>
+<li>Amiodarona</li>
+<li>Atropina</li>
+<li>Adenosina</li>
+<li>Noradrenalina</li>
+<li>Sulfato de magnésio</li>
+</ul>
+`,
+taqui: `
+<h2>Taquiarritmias</h2>
+<ul>
+<li>TV Monomórfica</li>
+<li>TV Polimórfica</li>
+<li>FA rápida</li>
+<li>Flutter auricular</li>
+<li>Cardioversão sincronizada</li>
+</ul>
+`,
+bradi: `
+<h2>Bradicardia</h2>
+<ul>
+<li>Avaliação ABCDE</li>
+<li>Atropina</li>
+<li>Pacing transcutâneo</li>
+<li>Adrenalina perfusão</li>
+<li>Dopamina</li>
+</ul>
+`,
+pospcr: `
+<h2>Pós-PCR</h2>
+<ul>
+<li>Oxigenação alvo</li>
+<li>Ventilação</li>
+<li>PAM alvo</li>
+<li>Sedação</li>
+<li>Controlo glicémico</li>
+</ul>
+`,
+anafilaxia: `
+<h2>Anafilaxia</h2>
+<ul>
+<li>Adrenalina IM</li>
+<li>Oxigénio</li>
+<li>Fluidoterapia</li>
+<li>Corticoterapia</li>
+<li>Monitorização</li>
+</ul>
+`
+};
+
+function openPopup(id){
+    document.getElementById("popup-content").innerHTML = content[id];
+    document.getElementById("popup").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closePopup(){
+    document.getElementById("popup").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
+</script>
+
+</body>
+</html>
